@@ -12,6 +12,7 @@ package ir;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 
 /**
@@ -32,7 +33,7 @@ public class HashedIndex implements Index {
 		if (index.containsKey(token)){
 			list = index.get(token);
 			//if(!(list.getLast().docID == docID))
-				list.insert(docID, offset);
+			list.insert(docID, offset);
 		}
 		else{
 			list = new PostingsList();
@@ -64,31 +65,41 @@ public class HashedIndex implements Index {
 	 */
 	public PostingsList search( Query query, int queryType, int rankingType, int structureType ) {
 		PostingsList result = new PostingsList();
-		if(queryType == Index.PHRASE_QUERY){
+		boolean phrase = false;
+		if(queryType == Index.PHRASE_QUERY)
+			phrase = true;
 
-		}
-		else if(queryType == Index.INTERSECTION_QUERY) {
-			if(query.size() > 1){
-				PostingsList prevResult = index.get(query.terms.get(0));
-				for (int i = 1; i < query.size(); i++) {
-					prevResult = intersection(prevResult, index.get(query.terms.get(i)));
-				}
-				result = prevResult;
+		if(query.size() > 1){
+			PostingsList prevResult = index.get(query.terms.get(0));
+			for (int i = 1; i < query.size(); i++) {
+				System.err.println("intersection with term: "+query.terms.get(i)+ " prevres size: "+prevResult.size());
+				prevResult = intersection(prevResult, index.get(query.terms.get(i)), phrase);
 			}
-			else{
-				result = index.get(query.terms.get(0));
-			}
+			result = prevResult;
 		}
+		else{
+			result = index.get(query.terms.get(0));
+		}
+
 		return result;
 	}
 
-	public PostingsList intersection(PostingsList a, PostingsList b){
+	public PostingsList intersection(PostingsList a, PostingsList b, boolean phrase){
 		PostingsList result = new PostingsList();
 		int i = 0;
 		int j = 0;
 		while (a.get(i) != null && b.get(j) != null){
 			if (a.get(i).docID == b.get(j).docID){
-				result.insert(a.get(i).docID, 1);
+				if(phrase){
+					LinkedList<Integer> first = a.get(i).offsets;
+					LinkedList<Integer> second = b.get(j).offsets;
+					if(gotPhrase(first,second)){
+						result.insert(b.get(j).docID, 1);
+					}
+				}
+				else{
+					result.insert(a.get(i).docID, 1);
+				}
 				i++;
 				j++;
 			}
@@ -102,6 +113,16 @@ public class HashedIndex implements Index {
 		return result;
 	}
 
+	public boolean gotPhrase(LinkedList<Integer> first, LinkedList<Integer> second){
+		for (int k = 0; k < first.size(); k++) {
+			for (int i = 0; i < second.size(); i++) {
+				if (first.get(k)+1 == second.get(i)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	/**
 	 *  No need for cleanup in a HashedIndex.
 	 */

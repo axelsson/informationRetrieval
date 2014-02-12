@@ -29,17 +29,14 @@ public class HashedIndex implements Index {
 	 */
 	public void insert( String token, int docID, int offset ) {
 		PostingsList list;
-		//PostingsEntry entry = new PostingsEntry(docID, 1);
 		if (index.containsKey(token)){
 			list = index.get(token);
-			//if(!(list.getLast().docID == docID))
-			list.insert(docID, offset);
 		}
 		else{
 			list = new PostingsList();
 			index.put(token, list);
-			list.insert(docID, offset);
 		}
+		list.insert(docID, offset);
 	}
 
 
@@ -84,6 +81,10 @@ public class HashedIndex implements Index {
 		return result;
 	}
 
+	/**
+	 * Intersection for getting the combined result of files containing a term. Creates a new list for the results.
+	 * If you search for a phrase, it finds the documents with that phrase and sets the offset to the second searched term. 
+	 */
 	public PostingsList intersection(PostingsList a, PostingsList b, boolean phrase){
 		PostingsList result = new PostingsList();
 		int i = 0;
@@ -93,8 +94,9 @@ public class HashedIndex implements Index {
 				if(phrase){
 					LinkedList<Integer> first = a.get(i).offsets;
 					LinkedList<Integer> second = b.get(j).offsets;
-					if(gotPhrase(first,second)){
-						result.insert(b.get(j).docID, 1);
+					int offset = gotPhrase(first,second);
+					if(offset != -1){
+						result.insert(b.get(j).docID, offset);
 					}
 				}
 				else{
@@ -113,15 +115,18 @@ public class HashedIndex implements Index {
 		return result;
 	}
 
-	public boolean gotPhrase(LinkedList<Integer> first, LinkedList<Integer> second){
+	/**
+	 *  Finds the offset for the second word in a phrase if it exists. Else, returns -1. 
+	 */
+	public int gotPhrase(LinkedList<Integer> first, LinkedList<Integer> second){
 		for (int k = 0; k < first.size(); k++) {
 			for (int i = 0; i < second.size(); i++) {
 				if (first.get(k)+1 == second.get(i)){
-					return true;
+					return second.get(i);
 				}
 			}
 		}
-		return false;
+		return -1;
 	}
 	/**
 	 *  No need for cleanup in a HashedIndex.

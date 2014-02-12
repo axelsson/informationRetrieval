@@ -56,18 +56,6 @@ public class PostingsList implements Serializable {
 			PostingsEntry entry = list.getLast();
 			entry.insertOffset(offset);
 		}
-		//list.add(entry);
-		/*if(list.size() == 0 || list.getLast().docID < entry.docID ){
-			list.add(entry);
-		}
-		else{
-			for (int i = list.size()-1; i >= 0; i--) {
-				if(list.get(i).docID <= entry.docID){
-					list.add(i, entry);
-					break;
-				}
-			}
-		}*/
 	}
 }
 

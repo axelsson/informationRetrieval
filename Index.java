@@ -16,6 +16,7 @@ public interface Index {
 
     /* Index types */
     public static final int HASHED_INDEX = 0;
+    public static final int SAVED_INDEX = 1;
 
     /* Query types */
     public static final int INTERSECTION_QUERY = 0;

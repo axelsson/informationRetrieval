@@ -13,10 +13,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -25,7 +29,6 @@ import javax.swing.event.*;
  *   A graphical interface to the information retrieval system.
  */
 public class SearchGUI extends JFrame {
-
 	/**  The indexer creating the search index. */
 	Indexer indexer = new Indexer();
 
@@ -55,8 +58,7 @@ public class SearchGUI extends JFrame {
 
 	/**  Directory from which the code is compiled and run. */
 	public static final String homeDir = "C:/Users/Johanna/workspace/irlab1";
-
-
+	public static final String path = "C:/Users/Johanna/workspace/irlab1/src/ir/indexed";
 	/*
 	 *   The nice logotype
 	 *   Generated at http://neswork.com/logo-generator/google-font
@@ -383,7 +385,15 @@ public class SearchGUI extends JFrame {
 		SearchGUI s = new SearchGUI();
 		s.createGUI();
 		s.decodeArgs( args );
-		s.index();
+		File f = new File(path);
+		if (f.exists() && f.isDirectory()){
+			System.err.println("Index exists, just begin to search");
+		}
+		else{
+			File dir = new File(path);
+			dir.mkdir();
+			s.index();
+		}
 	}
 
 }

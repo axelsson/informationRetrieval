@@ -42,7 +42,7 @@ public class SavedIndex implements Index {
 			if(!f.exists()){
 				f.createNewFile();
 				FileWriter fw = new FileWriter(f);
-				fw.write(docID+" "+offset);
+				fw.write(docID+" "+offset+"\n");
 				fw.close();
 			}
 			else{
@@ -50,8 +50,8 @@ public class SavedIndex implements Index {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
 				String line = br.readLine();
 				while(line!=null){
-					String[] newLine = br.readLine().split(" ");
-					if (newLine[0] == Integer.toString(docID)){
+					String[] newLine = line.split(" ");
+					if (newLine[0].equals(Integer.toString(docID))){
 						bw.append(" "+offset);
 						break;
 					}
@@ -106,15 +106,15 @@ public class SavedIndex implements Index {
 			phrase = true;
 
 		if(query.size() > 1){
-			PostingsList prevResult = index.get(query.terms.get(0));
+			PostingsList prevResult = getPostings(query.terms.get(0));
 			for (int i = 1; i < query.size(); i++) {
 				System.err.println("intersection with term: "+query.terms.get(i)+ " prevres size: "+prevResult.size());
-				prevResult = intersection(prevResult, index.get(query.terms.get(i)), phrase);
+				prevResult = intersection(prevResult, getPostings(query.terms.get(i)), phrase);
 			}
 			result = prevResult;
 		}
 		else{
-			result = index.get(query.terms.get(0));
+			result = getPostings(query.terms.get(0));
 		}
 
 		return result;

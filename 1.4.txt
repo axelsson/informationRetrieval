@@ -1,0 +1,143 @@
+
+precision: relevant / retrieved docs
+1 2/3
+2 0/9
+3 1/16
+4 3/17
+5 0/9
+6 0/3
+7 1/2
+8 0/23
+9 0/4
+10 1/6
+
+recall: relevant / total relevant
+
+antikens underverk
+0 om mausoleum, är ju underverk men inte i huvudsak antiken
+0. C:\Users\Johanna\workspace\irlab1\4000\3338.txt
+ 1. C:\Users\Johanna\workspace\irlab1\8000\7020.txt
+ 2. C:\Users\Johanna\workspace\irlab1\8000\7143.txt
+
+olympiska spel och fred
+(allt verkar vara nyheter/år typ)
+hard to label: none (endast städer, årtal, tennis)
+ 0. C:\Users\Johanna\workspace\irlab1\5000\4842.txt
+ 1. C:\Users\Johanna\workspace\irlab1\7000\6072.txt
+ 2. C:\Users\Johanna\workspace\irlab1\7000\6073.txt
+ 3. C:\Users\Johanna\workspace\irlab1\8000\7443.txt
+ 4. C:\Users\Johanna\workspace\irlab1\8000\7659.txt
+ 5. C:\Users\Johanna\workspace\irlab1\8000\7788.txt
+ 6. C:\Users\Johanna\workspace\irlab1\9000\8503.txt
+ 7. C:\Users\Johanna\workspace\irlab1\10000\9336.txt
+ 8. C:\Users\Johanna\workspace\irlab1\10000\9545.txt
+
+ europacupen
+ 1 friidrott inte huvudrubrik men förklarar cupen inom friidrott
+ resten: klubb vs stad. Nämner europacupen så man förstår att det är något inom sport men inte mer än så. 
+ 0. C:\Users\Johanna\workspace\irlab1\1000\250.txt
+ 1. C:\Users\Johanna\workspace\irlab1\1000\576.txt
+ 2. C:\Users\Johanna\workspace\irlab1\1000\863.txt
+ 3. C:\Users\Johanna\workspace\irlab1\1000\864.txt
+ 4. C:\Users\Johanna\workspace\irlab1\1000\871.txt
+ 5. C:\Users\Johanna\workspace\irlab1\2000\1170.txt
+ 6. C:\Users\Johanna\workspace\irlab1\2000\1693.txt
+ 7. C:\Users\Johanna\workspace\irlab1\3000\2020.txt
+ 8. C:\Users\Johanna\workspace\irlab1\3000\2900.txt
+ 9. C:\Users\Johanna\workspace\irlab1\5000\4307.txt
+ 10. C:\Users\Johanna\workspace\irlab1\5000\4308.txt
+ 11. C:\Users\Johanna\workspace\irlab1\6000\5744.txt
+ 12. C:\Users\Johanna\workspace\irlab1\7000\6075.txt
+ 13. C:\Users\Johanna\workspace\irlab1\9000\8016.txt
+ 14. C:\Users\Johanna\workspace\irlab1\9000\8177.txt
+ 15. C:\Users\Johanna\workspace\irlab1\9000\8467.txt
+
+ konflikten i palestina - svår att bedöma pga mycket kan 
+ vara intressant kringliggande saker, måste kunna historia
+ 3 palestina men inte konflikten
+ 8 person inblandad i konflikten, medlare
+ 16 om palestina, inte topic men massa info
+  0. C:\Users\Johanna\workspace\irlab1\1000\195.txt
+ 1. C:\Users\Johanna\workspace\irlab1\2000\1306.txt
+ 2. C:\Users\Johanna\workspace\irlab1\2000\1872.txt
+ 3. C:\Users\Johanna\workspace\irlab1\3000\2296.txt
+ 4. C:\Users\Johanna\workspace\irlab1\3000\2735.txt
+ 5. C:\Users\Johanna\workspace\irlab1\4000\3926.txt
+ 6. C:\Users\Johanna\workspace\irlab1\7000\6496.txt
+ 7. C:\Users\Johanna\workspace\irlab1\8000\7065.txt
+ 8. C:\Users\Johanna\workspace\irlab1\8000\7133.txt
+ 9. C:\Users\Johanna\workspace\irlab1\9000\8133.txt
+ 10. C:\Users\Johanna\workspace\irlab1\10000\9143.txt
+ 11. C:\Users\Johanna\workspace\irlab1\10000\9479.txt
+ 12. C:\Users\Johanna\workspace\irlab1\10000\9493.txt
+ 13. C:\Users\Johanna\workspace\irlab1\10000\9509.txt
+ 14. C:\Users\Johanna\workspace\irlab1\10000\9544.txt
+ 15. C:\Users\Johanna\workspace\irlab1\10000\9548.txt
+ 16. C:\Users\Johanna\workspace\irlab1\10000\9895.txt
+
+ snowboard - städer, årtal, inget svårt. 
+ 0. C:\Users\Johanna\workspace\irlab1\2000\1553.txt
+ 1. C:\Users\Johanna\workspace\irlab1\2000\1610.txt
+ 2. C:\Users\Johanna\workspace\irlab1\3000\2436.txt
+ 3. C:\Users\Johanna\workspace\irlab1\3000\2735.txt
+ 4. C:\Users\Johanna\workspace\irlab1\6000\5584.txt
+ 5. C:\Users\Johanna\workspace\irlab1\7000\6073.txt
+ 6. C:\Users\Johanna\workspace\irlab1\8000\7767.txt
+ 7. C:\Users\Johanna\workspace\irlab1\8000\7788.txt
+ 8. C:\Users\Johanna\workspace\irlab1\9000\8179.txt
+
+ den europeiska bilindustrin - två länder i europa + kina
+ 0. C:\Users\Johanna\workspace\irlab1\6000\5717.txt
+ 1. C:\Users\Johanna\workspace\irlab1\7000\6679.txt
+ 2. C:\Users\Johanna\workspace\irlab1\8000\7472.txt
+
+ enhetlig europeisk valuta - kanada och EU, EU nämner euro
+ 0. C:\Users\Johanna\workspace\irlab1\4000\3955.txt
+ 1. C:\Users\Johanna\workspace\irlab1\6000\5385.txt
+
+ sex i reklam
+ 4999 svårare, alan more, homosexuell, reklamtvister
+ 7140 tv4, reklam, inte sex
+ övriga: länder, årtal..
+ 0. C:\Users\Johanna\workspace\irlab1\1000\454.txt
+ 1. C:\Users\Johanna\workspace\irlab1\1000\499.txt
+ 2. C:\Users\Johanna\workspace\irlab1\1000\956.txt
+ 3. C:\Users\Johanna\workspace\irlab1\2000\1073.txt
+ 4. C:\Users\Johanna\workspace\irlab1\3000\2634.txt
+ 5. C:\Users\Johanna\workspace\irlab1\3000\2735.txt
+ 6. C:\Users\Johanna\workspace\irlab1\4000\3973.txt
+ 7. C:\Users\Johanna\workspace\irlab1\5000\4590.txt
+ 8. C:\Users\Johanna\workspace\irlab1\5000\4603.txt
+ 9. C:\Users\Johanna\workspace\irlab1\5000\4999.txt
+ 10. C:\Users\Johanna\workspace\irlab1\6000\5236.txt
+ 11. C:\Users\Johanna\workspace\irlab1\6000\5739.txt
+ 12. C:\Users\Johanna\workspace\irlab1\7000\6496.txt
+ 13. C:\Users\Johanna\workspace\irlab1\8000\7140.txt
+ 14. C:\Users\Johanna\workspace\irlab1\8000\7319.txt
+ 15. C:\Users\Johanna\workspace\irlab1\8000\7340.txt
+ 16. C:\Users\Johanna\workspace\irlab1\8000\7788.txt
+ 17. C:\Users\Johanna\workspace\irlab1\9000\8371.txt
+ 18. C:\Users\Johanna\workspace\irlab1\9000\8467.txt
+ 19. C:\Users\Johanna\workspace\irlab1\9000\8571.txt
+ 20. C:\Users\Johanna\workspace\irlab1\10000\9123.txt
+ 21. C:\Users\Johanna\workspace\irlab1\10000\9511.txt
+ 22. C:\Users\Johanna\workspace\irlab1\10000\9891.txt
+
+ lutande tornet i pisa
+1050 handlar om kraft, relevant om man vill veta hur det funkar
+resten: år, månad, raderade stycken
+ 0. C:\Users\Johanna\workspace\irlab1\2000\1050.txt
+ 1. C:\Users\Johanna\workspace\irlab1\3000\2735.txt
+ 2. C:\Users\Johanna\workspace\irlab1\9000\8371.txt
+ 3. C:\Users\Johanna\workspace\irlab1\9000\8991.txt
+
+ genteknik
+ 5181 virus, närheten, kan bidra till förståelse
+ 6756 evolution, också förståelse?
+ 8776 ett enzym, genteknik nämns om varför viktigt. 
+ 0. C:\Users\Johanna\workspace\irlab1\2000\1643.txt
+ 1. C:\Users\Johanna\workspace\irlab1\2000\1932.txt
+ 2. C:\Users\Johanna\workspace\irlab1\6000\5181.txt
+ 3. C:\Users\Johanna\workspace\irlab1\7000\6075.txt
+ 4. C:\Users\Johanna\workspace\irlab1\7000\6756.txt
+ 5. C:\Users\Johanna\workspace\irlab1\9000\8776.txt

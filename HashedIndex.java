@@ -133,4 +133,18 @@ public class HashedIndex implements Index {
 	 */
 	public void cleanup() {
 	}
+
+
+	@Override
+	public boolean filesLeft() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void writeToFile() {
+		// TODO Auto-generated method stub
+		
+	}
 }

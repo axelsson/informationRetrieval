@@ -385,7 +385,7 @@ public class SearchGUI extends JFrame {
 		SearchGUI s = new SearchGUI();
 		s.createGUI();
 		s.decodeArgs( args );
-		File f = new File(path);
+		/*File f = new File(path);
 		if (f.exists() && f.isDirectory()){
 			System.err.println("Index exists, just begin to search");
 		}
@@ -393,7 +393,8 @@ public class SearchGUI extends JFrame {
 			File dir = new File(path);
 			dir.mkdir();
 			s.index();
-		}
+		}*/
+		s.index();
 	}
 
 }

@@ -1,82 +1,88 @@
 skilsmässofrekvens i olika länder
 skilsmässa länder (0/10)
- 0. C:\Users\Johanna\workspace\irlab1\1000\837.txt islam 0
- 1. C:\Users\Johanna\workspace\irlab1\3000\2509.txt garvining 0
- 2. C:\Users\Johanna\workspace\irlab1\5000\4795.txt bob dylan 0
- 3. C:\Users\Johanna\workspace\irlab1\6000\5609.txt egypten 0
- 4. C:\Users\Johanna\workspace\irlab1\7000\6152.txt författare 0
- 5. C:\Users\Johanna\workspace\irlab1\8000\7488.txt beirut 0
- 6. C:\Users\Johanna\workspace\irlab1\8000\7788.txt årtal 0
- 7. C:\Users\Johanna\workspace\irlab1\9000\8234.txt årtal 0
- 8. C:\Users\Johanna\workspace\irlab1\9000\8639.txt politiker 0
- 9. C:\Users\Johanna\workspace\irlab1\10000\9077.txt politiker 0
+ 0. 837  islam 0
+ 1. 2509 garvining 0
+ 2. 4795 bob dylan 0
+ 3. 5609 egypten 0
+ 4. 6152 författare 0
+ 5. 7488 beirut 0
+ 6. 7788 årtal 0
+ 7. 8234 årtal 0
+ 8. 8639 politiker 0
+ 9. 907  politiker 0
 
  skilsmässa statistik (0/3)
-  0. C:\Users\Johanna\workspace\irlab1\4000\3271.txt lista stavfel 0
- 1. C:\Users\Johanna\workspace\irlab1\7000\6336.txt person 0
- 2. C:\Users\Johanna\workspace\irlab1\9000\8172.txt årtal 0
+ 0. 3271 lista stavfel 0
+ 1. 6336 person 0
+ 2. 8172 årtal 0
 
-gifta skiljer sig
- 0. C:\Users\Johanna\workspace\irlab1\1000\597.txt frälse 0
- 1. C:\Users\Johanna\workspace\irlab1\1000\837.txt islam 0
- 2. C:\Users\Johanna\workspace\irlab1\1000\915.txt kristendom 0
- 3. C:\Users\Johanna\workspace\irlab1\2000\1219.txt muhammed 0
- 4. C:\Users\Johanna\workspace\irlab1\3000\2056.txt skådis 0
- 5. C:\Users\Johanna\workspace\irlab1\6000\5431.txt slaveri 0
- 6. C:\Users\Johanna\workspace\irlab1\10000\9852.txt förintelsen 0
+gifta skiljer sig (0/7)
+ 0. 597 tfrälse 0
+ 1. 837 tislam 0
+ 2. 915 kristendom 0
+ 3. 1219 muhammed 0
+ 4. 2056 skådis 0
+ 5. 5431 slaveri 0
+ 6. 9852 förintelsen 0
 
+skilsmässor (1/5)
+ 0. 47 författare 0
+ 1. 837 islam 0
+ 2. 4989 stringberg 0
+ 3. 5871 årtal danmark statistik 1
+ 4. 9604 årtal
 
  politisk och ekonomisk framtid för Kaliningrad
  Kaliningrad ekonomi politik (0/5)
- 0. C:\Users\Johanna\workspace\irlab1\2000\1342.txt nazityskland 0
- 1. C:\Users\Johanna\workspace\irlab1\4000\3094.txt ryssland 0
- 2. C:\Users\Johanna\workspace\irlab1\4000\3743.txt polen 0
- 3. C:\Users\Johanna\workspace\irlab1\6000\5775.txt riga 0
- 4. C:\Users\Johanna\workspace\irlab1\9000\8133.txt årtal 0
+ 0. 1342 nazityskland 0
+ 1. 3094 ryssland 0
+ 2. 3743 polen 0
+ 3. 5775 riga 0
+ 4. 8133 årtal 0
 
  exklav ryssland - alla resultat är länder (0/7)
- 0. C:\Users\Johanna\workspace\irlab1\2000\1154.txt
- 1. C:\Users\Johanna\workspace\irlab1\4000\3955.txt
- 2. C:\Users\Johanna\workspace\irlab1\7000\6751.txt
- 3. C:\Users\Johanna\workspace\irlab1\8000\7273.txt
- 4. C:\Users\Johanna\workspace\irlab1\8000\7301.txt
- 5. C:\Users\Johanna\workspace\irlab1\8000\7342.txt
- 6. C:\Users\Johanna\workspace\irlab1\8000\7725.txt
+ 0. 1154
+ 1. 3955
+ 2. 6751
+ 3. 7273
+ 4. 7301
+ 5. 7342
+ 6. 7725
 
 kaliningrad ryssland 15 resultat, en del med innan, irrelevanta (0/15)
- 2. C:\Users\Johanna\workspace\irlab1\3000\2122.txt östersjön 0
- 3. C:\Users\Johanna\workspace\irlab1\3000\2336.txt loggarkiv 0
- 5. C:\Users\Johanna\workspace\irlab1\4000\3096.txt kalmar 0
- 7. C:\Users\Johanna\workspace\irlab1\5000\4203.txt spårväg 0
- 8. C:\Users\Johanna\workspace\irlab1\5000\4503.txt baltikum 0
- 10. C:\Users\Johanna\workspace\irlab1\7000\6074.txt 2004 0
- 11. C:\Users\Johanna\workspace\irlab1\7000\6232.txt carl bildt 0
- 12. C:\Users\Johanna\workspace\irlab1\8000\7489.txt mexico city 0
- 14. C:\Users\Johanna\workspace\irlab1\9000\8201.txt preussen 0
+ 2. 2122 östersjön 0
+ 3. 2336 loggarkiv 0
+ 5. 3096 kalmar 0
+ 7. 4203 spårväg 0
+ 8. 4503 baltikum 0
+ 10. 6074 2004 0
+ 11. 6232 carl bildt 0
+ 12. 7489 mexico city 0
+ 14. 8201 preussen 0
 
 information	 om	 FN-konventionen	 om	 barns	 rättigheter
 
 barn rättigheter FN-konventionen (0/3)
- 0. C:\Users\Johanna\workspace\irlab1\2000\1872.txt 11 sept 0
- 1. C:\Users\Johanna\workspace\irlab1\6000\5577.txt samer 0
- 2. C:\Users\Johanna\workspace\irlab1\8000\7385.txt singapore 0
+ 0. 1872 11 sept 0
+ 1. 5577 samer 0
+ 2. 7385 singapore 0
 
 barn konvention FN (0/5)
-0. C:\Users\Johanna\workspace\irlab1\2000\1872.txt  11 sept 0
- 1. C:\Users\Johanna\workspace\irlab1\4000\3244.txt belgien 0
- 2. C:\Users\Johanna\workspace\irlab1\6000\5577.txt samer 0
- 3. C:\Users\Johanna\workspace\irlab1\6000\5783.txt flykting 0
- 4. C:\Users\Johanna\workspace\irlab1\8000\7385.txt singapore 0
+0. 1872  11 sept 0
+ 1. 3244 belgien 0
+ 2. 5577 samer 0
+ 3. 5783 flykting 0
+ 4. 7385 singapore 0
 
 barnkonvention (2/3)
- 0. C:\Users\Johanna\workspace\irlab1\1000\214.txt barn 2
- 1. C:\Users\Johanna\workspace\irlab1\1000\538.txt FN 1
- 2. C:\Users\Johanna\workspace\irlab1\7000\6205.txt astrid lindgren 0
+ 0. 214 barn 2
+ 1. 538 FN 1
+ 2. 6205 astrid lindgren 0
 
  barnkonventionen (3/3)
-  0. C:\Users\Johanna\workspace\irlab1\1000\214.txt barn 2
- 1. C:\Users\Johanna\workspace\irlab1\7000\6294.txt aga 1
- 2. C:\Users\Johanna\workspace\irlab1\9000\8548.txt 1989 1
+ 0. 214 barn 2
+ 1. 6294 aga 1
+ 2. 8548 1989 1
 
 
 Why	can	we	not	simply	

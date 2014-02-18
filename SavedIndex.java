@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map.Entry;
+import java.util.Set;
 
 
 /**
@@ -30,41 +32,72 @@ public class SavedIndex implements Index {
 
 	/** The index as a hashtable. */
 	private HashMap<String,PostingsList> index = new HashMap<String,PostingsList>();
+	int previousFile = -1;
+	int files = 0;
 
-
+	public boolean filesLeft(){
+		if (files > 0){
+			return true;
+		}
+		return false;
+	}
 	/**
 	 *  Inserts this token in the index.
 	 */
 	public void insert( String token, int docID, int offset ) {
-		String filename = SearchGUI.path+"/"+token;
-		File f = new File(filename);
-		try {
-			if(!f.exists()){
-				f.createNewFile();
-				FileWriter fw = new FileWriter(f);
-				fw.write(docID+" "+offset+"\n");
-				fw.close();
+		if(docID != previousFile){
+			files++;
+			System.err.println(files);
+			previousFile = docID;
+			if(files > 500){
+				writeToFile();
+				files = 0;
+				index.clear();
 			}
-			else{
-				BufferedReader br = new BufferedReader(new FileReader(f));
-				BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
-				String line = br.readLine();
-				while(line!=null){
-					String[] newLine = line.split(" ");
-					if (newLine[0].equals(Integer.toString(docID))){
-						bw.append(" "+offset);
-						break;
-					}
-					line = br.readLine();
-				}
-				bw.close();
-				br.close();
-			}
-		} catch (IOException e) {
-			System.err.println("error");
 		}
+		PostingsList list;
+		if (index.containsKey(token)){
+			list = index.get(token);
+		}
+		else{
+			list = new PostingsList();
+			index.put(token, list);
+		}
+		list.insert(docID, offset);
 	}
 
+	public void writeToFile(){
+		try{
+		for (Entry<String, PostingsList> entry : index.entrySet()) {
+			if(entry.getKey().equals(""))
+				continue;
+			String filename = SearchGUI.path+"/"+entry.getKey();
+			File file = new File(filename);
+			if(!file.exists()){
+				file.createNewFile();
+			}
+			BufferedWriter f = new BufferedWriter(new FileWriter(file, true));
+			PostingsList list = entry.getValue();
+			for (int i = 0; i < entry.getValue().size(); i++) {
+				PostingsEntry elem = list.get(i);
+				StringBuilder sb = new StringBuilder();
+				LinkedList offsets = elem.offsets;
+				//System.err.println("docID:"+elem.docID);
+				sb.append(elem.docID).append(' ');
+				
+				for (int j = 0; j < offsets.size(); j++) {
+					//System.err.println("offset: "+offsets.get(j));
+					sb.append(offsets.get(j)).append(' ');
+				}
+				sb.append("\n");
+				f.append(sb);
+				//System.err.println("sb: "+sb);
+			}
+			f.close();
+		}} catch(IOException e ){
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 *  Returns all the words in the index.

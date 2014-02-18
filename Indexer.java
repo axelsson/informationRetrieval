@@ -28,7 +28,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  *   Processes a directory structure and indexes all PDF and text files.
  */
 public class Indexer {
-
 	/** The index to be built up by this indexer. */
 	public Index index;
 
@@ -57,8 +56,8 @@ public class Indexer {
 	 *  Initializes the index as a HashedIndex.
 	 */
 	public Indexer() {
-		index = new SavedIndex();
-		//index = new HashedIndex();
+		//index = new SavedIndex();
+		index = new HashedIndex();
 	}
 
 

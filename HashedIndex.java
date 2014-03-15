@@ -4,15 +4,17 @@
  * 
  *   First version:  Johan Boye, 2010
  *   Second version: Johan Boye, 2012
- *   Additions: Hedvig Kjellström, 2012-14
+ *   Additions: Hedvig KjellstrÃ¶m, 2012-14
  */  
 
 
 package ir;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 
 /**
@@ -65,6 +67,8 @@ public class HashedIndex implements Index {
 		boolean phrase = false;
 		if(queryType == Index.PHRASE_QUERY)
 			phrase = true;
+		if(queryType == Index.RANKED_QUERY)
+
 
 		if(query.size() > 1){
 			PostingsList prevResult = index.get(query.terms.get(0));
@@ -80,7 +84,43 @@ public class HashedIndex implements Index {
 
 		return result;
 	}
-
+	
+	//tf_idf = offset.size (förekomst i ett dokument) / 
+	/*
+	 * tf term frequency offset.size
+	 * wt,q = idf i boken
+	 * docLengths 
+	 * */
+	public PostingsList cosineScore(Query q){
+		HashMap<Integer, Float> scores = new HashMap<Integer,Float>();
+		PostingsList results = new PostingsList();
+		for (String term : q.terms) {
+			PostingsList list = index.get(term);
+			int w_tq = index.size()/list.size();
+			for (int i = 0; i < list.size(); i++) {
+				PostingsEntry entry = list.get(i);
+				int tf_td = entry.offsets.size();
+				int wf_td = 1;
+				float score = wf_td * w_tq; 
+				if(scores.containsKey(entry.docID)){
+					scores.put(entry.docID, score);
+				}
+				else{
+					scores.put(entry.docID, scores.get(entry.docID)+score);
+				}
+			}
+		}
+		//iterarera genom och normalisera, släng in i postingslist
+		for (Entry<Integer, Float> entry : scores.entrySet()) {
+		    Integer key = entry.getKey();
+		    Float value = entry.getValue();
+		    // ...
+		}
+		
+		
+		return null;
+	}
+	
 	/**
 	 * Intersection for getting the combined result of files containing a term. Creates a new list for the results.
 	 * If you search for a phrase, it finds the documents with that phrase and sets the offset to the second searched term. 

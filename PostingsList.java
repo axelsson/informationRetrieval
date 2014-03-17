@@ -24,7 +24,9 @@ public class PostingsList implements Serializable {
 	public int size() {
 		return list.size();
 	}
-
+	public LinkedList<PostingsEntry> toList(){
+		return list;
+	}
 	public boolean contains( PostingsEntry entry){
 		return list.contains(entry);
 	}
@@ -43,13 +45,13 @@ public class PostingsList implements Serializable {
 		return list.getLast();
 	}
 
-	public void insert(int docID, int offset){
+	public void insert(int docID, int offset, double value){
 		if(list.size() == 0 || list.getLast().docID != docID){
-			PostingsEntry entry = new PostingsEntry(docID, 1, offset);
+			PostingsEntry entry = new PostingsEntry(docID, value, offset);
 			list.add(entry);
 		}
 		else if(list.getLast().docID != docID){
-			PostingsEntry entry = new PostingsEntry(docID, 1, offset);
+			PostingsEntry entry = new PostingsEntry(docID, value, offset);
 			list.add(entry);
 		}
 		else{

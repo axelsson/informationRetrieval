@@ -63,7 +63,7 @@ public class SavedIndex implements Index {
 			list = new PostingsList();
 			index.put(token, list);
 		}
-		list.insert(docID, offset);
+		list.insert(docID, offset, 1);
 	}
 
 	public void writeToFile(){
@@ -168,11 +168,11 @@ public class SavedIndex implements Index {
 					LinkedList<Integer> second = b.get(j).offsets;
 					int offset = gotPhrase(first,second);
 					if(offset != -1){
-						result.insert(b.get(j).docID, offset);
+						result.insert(b.get(j).docID, offset,1);
 					}
 				}
 				else{
-					result.insert(a.get(i).docID, 1);
+					result.insert(a.get(i).docID, 1, 1);
 				}
 				i++;
 				j++;

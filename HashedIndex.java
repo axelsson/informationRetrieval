@@ -11,9 +11,12 @@
 package ir;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map.Entry;
 
 
@@ -38,7 +41,7 @@ public class HashedIndex implements Index {
 			list = new PostingsList();
 			index.put(token, list);
 		}
-		list.insert(docID, offset);
+		list.insert(docID, offset, 1);
 	}
 
 
@@ -68,8 +71,16 @@ public class HashedIndex implements Index {
 		if(queryType == Index.PHRASE_QUERY)
 			phrase = true;
 		if(queryType == Index.RANKED_QUERY)
+			result = searchRanked(query);
+		else{
+		result = doIntersection(query, phrase);
+		}
+		return result;
+	}
 
 
+	private PostingsList doIntersection(Query query, boolean phrase) {
+		PostingsList result;
 		if(query.size() > 1){
 			PostingsList prevResult = index.get(query.terms.get(0));
 			for (int i = 1; i < query.size(); i++) {
@@ -81,44 +92,44 @@ public class HashedIndex implements Index {
 		else{
 			result = index.get(query.terms.get(0));
 		}
-
 		return result;
 	}
 	
-	//tf_idf = offset.size (förekomst i ett dokument) / 
-	/*
-	 * tf term frequency offset.size
-	 * wt,q = idf i boken
-	 * docLengths 
-	 * */
+	private PostingsList searchRanked(Query query) {
+		PostingsList results = cosineScore(query);
+		Collections.sort(results.toList());
+		return results;
+	}
+/*
+ * tf_idf_dt=ftdt*idft/len d
+ * idft = ln(N/dft)
+ */
 	public PostingsList cosineScore(Query q){
-		HashMap<Integer, Float> scores = new HashMap<Integer,Float>();
+		HashMap<Integer, Double> scores = new HashMap<Integer,Double>();
 		PostingsList results = new PostingsList();
+		int N = docIDs.size();
 		for (String term : q.terms) {
 			PostingsList list = index.get(term);
-			int w_tq = index.size()/list.size();
-			for (int i = 0; i < list.size(); i++) {
-				PostingsEntry entry = list.get(i);
-				int tf_td = entry.offsets.size();
-				int wf_td = 1;
-				float score = wf_td * w_tq; 
+			int df_t = list.size();
+			double idf_t = Math.log(N/df_t);
+			double w_tq = idf_t;
+			for (PostingsEntry entry : list.toList()) {
+				int wf_td = entry.offsets.size();	//tf_df
+				double score = wf_td * w_tq; 
 				if(scores.containsKey(entry.docID)){
-					scores.put(entry.docID, score);
+					scores.put(entry.docID, scores.get(entry.docID) + score);
 				}
 				else{
-					scores.put(entry.docID, scores.get(entry.docID)+score);
+					scores.put(entry.docID, score);
 				}
 			}
 		}
-		//iterarera genom och normalisera, släng in i postingslist
-		for (Entry<Integer, Float> entry : scores.entrySet()) {
+		for (Entry<Integer, Double> entry : scores.entrySet()) {
 		    Integer key = entry.getKey();
-		    Float value = entry.getValue();
-		    // ...
+		    double value = entry.getValue()/(double)docLengths.get(""+key);
+		    results.insert(key, 1, value);
 		}
-		
-		
-		return null;
+		return results;
 	}
 	
 	/**
@@ -136,11 +147,11 @@ public class HashedIndex implements Index {
 					LinkedList<Integer> second = b.get(j).offsets;
 					int offset = gotPhrase(first,second);
 					if(offset != -1){
-						result.insert(b.get(j).docID, offset);
+						result.insert(b.get(j).docID, offset, 1);
 					}
 				}
 				else{
-					result.insert(a.get(i).docID, 1);
+					result.insert(a.get(i).docID, 1, 1);
 				}
 				i++;
 				j++;

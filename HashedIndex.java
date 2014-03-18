@@ -103,11 +103,7 @@ public class HashedIndex implements Index {
 /*
  * tf_idf_dt=ftdt*idft/len d
  * idft = ln(N/dft)
- * Common errors are
-
-to divide with the doc length computed only in terms of the query terms, instead of all terms in the doc,
-to divide with the doc length twice, both at tf_idf computation for each term and after the for loop over query terms.
- */
+*/
 	public PostingsList cosineScore(Query q){
 		HashMap<Integer, Double> scores = new HashMap<Integer,Double>();
 		PostingsList results = new PostingsList();

@@ -159,9 +159,9 @@ public class PageRank{
 	void computePagerank( int numberOfDocs ) {
 		double start = System.currentTimeMillis();
 		//double[] pageRanks = powerIteration();
-		//double[] pageRanks = approximationMethod();
+		double[] pageRanks = approximationMethod();
 		//double[] pageRanks = MCrandomStart();
-		double[] pageRanks = MCcyclicOrComplete(false);	//true for complete, false for cyclic
+		//double[] pageRanks = MCcyclicOrComplete(false);	//true for complete, false for cyclic
 		double stop = System.currentTimeMillis()-start;
 		System.out.println("Completed in "+stop+" ms.");
 		PriorityQueue<Rank> ranks = new PriorityQueue<>();
@@ -224,11 +224,11 @@ public class PageRank{
 			}
 		}
 		System.err.println("Mean value for walks:"+tValues/(double)numberOfWalks);
-		if(isComplete)	{normalize(pageRanks, 1/(double)(numberOfDocs*m));}
+		if(isComplete)	{normalize(pageRanks, BORED/(double)(numberOfDocs*m));}
 		else			{normalize(pageRanks, 1/(double)(numberOfDocs*m));}
 		return pageRanks;
 	}
-	//
+	//complete walk which records every visit to a link
 	private void completeWalk(int start, double[] result){
 		int current = start;
 		double prob = 0;
@@ -241,7 +241,6 @@ public class PageRank{
 				current = r.nextInt(numberOfDocs);
 			}
 			else if(prob < BORED){
-				current = r.nextInt(numberOfDocs);
 				break;
 			}
 			else{
@@ -251,7 +250,6 @@ public class PageRank{
 			result[current]++;
 		}
 		tValues += t;
-		//System.err.println("Walked "+t+" times.");
 	}
 
 	private double[] approximationMethod(){

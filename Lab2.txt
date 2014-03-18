@@ -1,6 +1,6 @@
 2.2
 Why	do	we	use	a	union	query	here,	but	an	intersection	query	in	Assignment	1?
-- mer värt att ha flera förekomster av samma än absolut en av varje för fraser?
+- mer värt att ha flera förekomster av samma än absolut en av varje för fraser? också: "den tyska huvudstaden", "den" inte viktigt för resultat
 
 You	should	
 be	 able	 to	 explain	 this	 concept	 using	 pen	 and	 paper,	 and	 discuss	 how	 variations	 in	 tf	
@@ -57,8 +57,7 @@ Precision = relevant / retrieved
 
 2.5 no-sinks approximation
 What	is	 the	 highest	 ranked	 document	in	 the	 whole	 structure?	Does	it	 make	 sense,	 given	your	conclusions	from	Task	2.4	of	what	pagerank	represents	in	this	dataset?
-- Latin, makear sense eftersom många har anledning att länka till det, både inom ämnena historia, geografi, naturkunskap, språkkunskap m fl. Väldigt rimligt. 
-
+kategori top, innehåller alla kategorier, inte konstigt att alla sitter ihop med den
 
 2.6 Monte carlo
 What	do	you	 see?	Why	do	you	get	 this	result?	Explain	and	relate	 to	 the	properties	of	 the	

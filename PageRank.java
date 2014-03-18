@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.io.*;
 
+import org.omg.CORBA.Current;
+
 public class PageRank{
 
 	/**  
@@ -52,6 +54,8 @@ public class PageRank{
 	 */
 	int numberOfSinks = 0;
 	int numberOfDocs = 0;
+	int numberOfWalks = 0;
+	double tValues = 0;	//used to get a mean for T.
 
 	/**
 	 *   The probability that the surfer will be bored, stop
@@ -70,14 +74,13 @@ public class PageRank{
 	 *   of whether the transistion probabilities converge or not.
 	 */
 	final static int MAX_NUMBER_OF_ITERATIONS = 1000;
-
-
 	/* --------------------------------------------- */
 
 
 	public PageRank( String filename ) {
 		int noOfDocs = readDocs( filename );
 		numberOfDocs = noOfDocs;
+		numberOfWalks = 5000000;
 		computePagerank( noOfDocs );
 	}
 
@@ -151,17 +154,104 @@ public class PageRank{
 		return fileIndex;
 	}
 	/*
-	 *   Computes the pagerank of each document.
+	 *   Computes the pagerank of each document with a chosen method. Will sort the results and print them.
 	 */
 	void computePagerank( int numberOfDocs ) {
-		//double[][] P = transitionProbabilityMatrix();
-		//double[] pageRanks = powerIteration(P);
-		double[] pageRanks = approximationMethod();
+		double start = System.currentTimeMillis();
+		//double[] pageRanks = powerIteration();
+		//double[] pageRanks = approximationMethod();
+		//double[] pageRanks = MCrandomStart();
+		double[] pageRanks = MCcyclicOrComplete(false);	//true for complete, false for cyclic
+		double stop = System.currentTimeMillis()-start;
+		System.out.println("Completed in "+stop+" ms.");
 		PriorityQueue<Rank> ranks = new PriorityQueue<>();
 		for (int i = 0; i < pageRanks.length; i++) {
 			ranks.add(new Rank(docName[i], pageRanks[i]));
 		}
 		printPageRank(ranks);
+	}
+	
+	//take a random walk, beginning at start, updating the result array before returning.
+	private void walk(int start, double[] result){
+		int current = start;
+		Random r = new Random();
+		int T = 100;
+		int t = 0;
+		for (t = 0; t < T; t++) {
+			double prob = r.nextDouble();
+			//chose a new random link if the current one does not have any links
+			if(out[current] == 0){
+				current = r.nextInt(numberOfDocs);
+			}
+			//break the loop with probability BORED, the current link is the one updated
+			else if(prob < BORED){
+				break;
+			}
+			//chose one of the avaliable links from the current page
+			else{
+				ArrayList<Integer> avaliableLinks = new ArrayList<Integer> (link.get(current).keySet ()); 
+				current =avaliableLinks.get (r.nextInt (avaliableLinks.size ())); 
+			}
+		}
+		tValues += t;
+		result[current]++;
+	}
+	//take N walks from a random starting page, normalize by dividing with N
+	private double[] MCrandomStart(){
+		System.err.println("Began MC random start.");
+		double[] pageRanks  = new double[numberOfDocs];
+		Random r = new Random();
+		int start = 0;
+		for (int i = 0; i < numberOfWalks; i++) {
+			start = r.nextInt(numberOfDocs);
+			walk(start, pageRanks);
+		}
+		System.err.println("Mean value for walks:"+tValues/(double)numberOfWalks);
+		normalize(pageRanks, 1/(double)numberOfWalks);
+		return pageRanks;
+	}
+
+	//take N random walks in a cyclic fashion, for each link m times. Normalize by dividing with N*m
+	private double[] MCcyclicOrComplete(boolean isComplete){
+		if(isComplete){System.err.println("Began MC completePath.");}
+		else{System.err.println("Began MC cyclic start.");}
+		double[] pageRanks  = new double[numberOfDocs];
+		int m = 500;
+		for (int i = 0; i < numberOfDocs; i++) {
+			for (int j = 0; j < m; j++) {
+				if(isComplete)	{completeWalk(i, pageRanks);}
+				else			{walk(i, pageRanks);}
+			}
+		}
+		System.err.println("Mean value for walks:"+tValues/(double)numberOfWalks);
+		if(isComplete)	{normalize(pageRanks, 1/(double)(numberOfDocs*m));}
+		else			{normalize(pageRanks, 1/(double)(numberOfDocs*m));}
+		return pageRanks;
+	}
+	//
+	private void completeWalk(int start, double[] result){
+		int current = start;
+		double prob = 0;
+		Random r = new Random();
+		int T = 100;
+		int t = 0;
+		for (t = 0; t < T; t++) {
+			prob = r.nextDouble();
+			if(out[current]==0){
+				current = r.nextInt(numberOfDocs);
+			}
+			else if(prob < BORED){
+				current = r.nextInt(numberOfDocs);
+				break;
+			}
+			else{
+				ArrayList<Integer> avaliableLinks = new ArrayList<Integer> (link.get(current).keySet ()); 
+				current =avaliableLinks.get (r.nextInt (avaliableLinks.size ())); 
+			}
+			result[current]++;
+		}
+		tValues += t;
+		//System.err.println("Walked "+t+" times.");
 	}
 
 	private double[] approximationMethod(){
@@ -191,16 +281,9 @@ public class PageRank{
 		System.err.println("Ran "+iterations+" iterations.");
 		return next;
 	}
-	/* for every i:
-			for every link i->j:
-				x’[j] += x[i]*c/out[i]
-			x’[i] += (1-c)/N
-			x’[i] += s/N/N
-	x = x’
-	x’= 0
-	 */
 
-	private double[] powerIteration(double[][] P){
+	private double[] powerIteration(){
+		double[][] P = transitionProbabilityMatrix();
 		double[] current = new double[numberOfDocs];
 		double[] next  = new double[numberOfDocs];
 		next[0] = 1;
@@ -240,8 +323,6 @@ public class PageRank{
 		return P;
 	}
 
-	/* --------------------------------------------- */
-
 	public static void main( String[] args ) {
 		if ( args.length != 1 ) {
 			System.err.println( "Please give the name of the link file" );
@@ -257,8 +338,13 @@ public class PageRank{
 		for (int i = 0; i < numberOfDocs; i++) {
 			diff +=Math.abs(current[i]-next[i]);
 		}
-		System.out.println(diff);
+		//System.out.println(diff);
 		return diff;
+	}
+	private void normalize(double[] pageRanks, double n){
+		for (int i = 0; i < pageRanks.length; i++) {
+			pageRanks[i] *= n;
+		}
 	}
 	private void printPageRank(PriorityQueue<Rank> ranks){
 		int num = 1;
@@ -266,7 +352,7 @@ public class PageRank{
 		f.setMaximumFractionDigits (6); 
 		while(!ranks.isEmpty() && num < 51){
 			Rank r = ranks.poll();
-			System.err.println(num+". " +r.name+ " "+ r.rank);//f.format(r.rank));
+			System.err.println(num+". " +r.name+ " "+ f.format(r.rank));
 			num++;
 		}
 	}

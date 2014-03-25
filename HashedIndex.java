@@ -96,7 +96,8 @@ public class HashedIndex implements Index {
 	}
 	
 	private PostingsList searchRanked(Query query) {
-		PostingsList results = cosineScore(query);
+		HashMap<Integer, Double> scores = getCosineScores(query);
+		PostingsList results = getResultsFromScore(scores);
 		Collections.sort(results.toList());
 		return results;
 	}
@@ -104,18 +105,21 @@ public class HashedIndex implements Index {
  * tf_idf_dt=ftdt*idft/len d
  * idft = ln(N/dft)
 */
-	public PostingsList cosineScore(Query q){
+	public HashMap<Integer, Double> getCosineScores(Query q){
 		HashMap<Integer, Double> scores = new HashMap<Integer,Double>();
-		PostingsList results = new PostingsList();
+		
 		int N = docIDs.size();
+		int i = 0;
 		for (String term : q.terms) {
 			PostingsList list = index.get(term);
 			int df_t = list.size();
 			double idf_t = Math.log(N/df_t);
 			double w_tq = idf_t;
+			double weight = q.weights.get(i);
 			for (PostingsEntry entry : list.toList()) {
+				//weight ska in här nånstans
 				int wf_td = entry.offsets.size();	//tf_df
-				double score = wf_td * w_tq; 
+				double score = wf_td * w_tq*weight; 
 				if(scores.containsKey(entry.docID)){
 					scores.put(entry.docID, scores.get(entry.docID) + score);
 				}
@@ -123,7 +127,14 @@ public class HashedIndex implements Index {
 					scores.put(entry.docID, score);
 				}
 			}
+			i++;
 		}
+		return scores;
+
+	}
+	
+	public PostingsList getResultsFromScore(HashMap<Integer, Double> scores){
+		PostingsList results = new PostingsList();
 		for (Entry<Integer, Double> entry : scores.entrySet()) {
 		    Integer key = entry.getKey();
 		    double value = entry.getValue()/(double)docLengths.get(""+key);

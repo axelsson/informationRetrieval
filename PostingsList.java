@@ -30,6 +30,15 @@ public class PostingsList implements Serializable {
 	public boolean contains( PostingsEntry entry){
 		return list.contains(entry);
 	}
+	
+	public PostingsEntry getEntryByDocID(int docID){
+		PostingsEntry result = null;
+		for (PostingsEntry entry : list) {
+			if(entry.docID == docID)
+				return entry;
+		}
+		return result;
+	}
 
 	/**  Returns the ith posting */
 	public PostingsEntry get( int i ) {
@@ -58,6 +67,9 @@ public class PostingsList implements Serializable {
 			PostingsEntry entry = list.getLast();
 			entry.insertOffset(offset);
 		}
+	}
+	public void add(PostingsEntry entry){
+		list.add(entry);
 	}
 }
 

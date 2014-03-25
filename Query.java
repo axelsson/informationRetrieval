@@ -7,6 +7,12 @@
 
 package ir;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
@@ -53,13 +59,90 @@ public class Query {
      *  Expands the Query using Relevance Feedback
      */
     public void relevanceFeedback( PostingsList results, boolean[] docIsRelevant, Indexer indexer ) {
-	// results contain the ranked list from the current search
-	// docIsRelevant contains the users feedback on which of the 10 first hits are relevant
-	
-	//
-	//  YOUR CODE HERE
-	//
+    	PostingsList relevantDocs = new PostingsList();
+    	PostingsList nonRelevantDocs = new PostingsList();
+    	double numRelevantDocs = 0;
+    	for (int i = 0; i < 10; i++) {
+			if(docIsRelevant[i]){
+				relevantDocs.add(results.get(i));
+				numRelevantDocs++;
+			}
+			else
+				nonRelevantDocs.add(results.get(i));
+		}
+    	numRelevantDocs = 1.0/numRelevantDocs;
+    	//numRelevantDocs = Math.sqrt(numRelevantDocs);
+    	normalizeEntries(results);
+    	normalizeWeights();
+    	
+    	double alpha = 1.0;
+    	double beta = 0.25;
+    	//multiply query terms with alpha
+    	for (int i = 0; i < weights.size(); i++) {
+    		double w = weights.get(i)*alpha;
+    		weights.set(i,w);
+		}
+    	//add terms for each relevant document
+    	for (int i = 0; i < 10; i++) {
+			if(docIsRelevant[i]){
+				addTerms(results.get(i), indexer, beta);
+			}
+    	}
     }
+
+	private void addTerms(PostingsEntry entry, Indexer indexer, double beta) {
+		ArrayList<String> termsInDoc = new ArrayList<String>();
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(""+indexer.index.docIDs.get("" +entry.docID))));
+			SimpleTokenizer tokenizer = new SimpleTokenizer(br);
+			
+			while ( tokenizer.hasMoreTokens() ) {
+				termsInDoc.add(tokenizer.nextToken());
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//för varje uthämtat ord från dokumentet, räkna ihop ny vikt
+		for (String term : termsInDoc) {
+			double weight = 1.0/indexer.index.getPostings(term).getEntryByDocID(entry.docID).offsets.size();
+			if(terms.contains(term)){
+				//om termen redan finns, öka på vikt
+				int index = terms.indexOf(term);
+				weights.set(index, weights.get(index)+weight*beta);
+			}
+			else{
+				//annars lägg till term och vikt
+				terms.add(term);
+				weights.add(weight*beta);
+			}
+		}
+	}
+
+	private void normalizeWeights() {
+		double score = 0;
+    	for (Double weight : weights) {
+			score = weight*weight;
+		}
+    	score = Math.sqrt(score);
+    	for (int i = 0; i < weights.size();i++) {
+    		weights.set(i, weights.get(i)/score);
+		}
+	}
+
+	private void normalizeEntries(PostingsList results) {
+		double score = 0;
+    	for (PostingsEntry entry : results.toList()) {
+			score += entry.score * entry.score;
+		}
+    	score = Math.sqrt(score);
+    	for (PostingsEntry entry : results.toList()) {
+			entry.score /= score;
+		}
+	}
 }
 
     

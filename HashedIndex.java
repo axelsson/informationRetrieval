@@ -67,15 +67,55 @@ public class HashedIndex implements Index {
 	 */
 	public PostingsList search( Query query, int queryType, int rankingType, int structureType ) {
 		PostingsList result = new PostingsList();
-		boolean phrase = false;
+		double lowIdf = 0.3;
+		double[] idfForTerms = computeIdfForTerms(query);
+		boolean speedUp = true;
+		/*
+		 * spara bara high-idf:
+		 * 
+		 * 
+		 * intersection och ranked, bara ta bort ord
+		 * phrase queries, word * * nextWord
+		 */
+		double startTime = System.nanoTime();
 		if(queryType == Index.PHRASE_QUERY)
-			phrase = true;
-		if(queryType == Index.RANKED_QUERY)
+			result = doIntersection(query, true);
+		else if(queryType == Index.RANKED_QUERY){
+			if(speedUp)
+				removeTerms(query, idfForTerms);
 			result = searchRanked(query);
-		else{
-			result = doIntersection(query, phrase);
+		}else if(queryType == Index.INTERSECTION_QUERY){
+			if(speedUp)
+				removeTerms(query, idfForTerms);
+			result = doIntersection(query, false);
 		}
+		double endTime = System.nanoTime();
+		System.out.println(query.terms.toString() + " "+(endTime-startTime)+" ns.");
 		return result;
+	}
+
+	private void removeTerms(Query query, double[] idfForTerms) {
+		for (int i = 0; i < idfForTerms.length; i++) {
+			if(idfForTerms[i] < 1.0){
+				query.terms.remove(i);
+				query.weights.remove(i);
+			}
+		}
+	}
+
+
+	private double[] computeIdfForTerms(Query query) {
+		double[] idf = new double[query.terms.size()];
+		int N = docIDs.size();
+		int i = 0;
+		for (String term : query.terms) {
+			PostingsList list = index.get(term);
+			int df_t = list.size();
+			idf[i] = Math.log(N/df_t);
+			System.out.println("idf for: "+term+" "+idf[i]);
+			i++;
+		}
+		return idf;
 	}
 
 
@@ -85,7 +125,7 @@ public class HashedIndex implements Index {
 			PostingsList prevResult = index.get(query.terms.get(0));
 			for (int i = 1; i < query.size(); i++) {
 				System.err.println("intersection with term: "+query.terms.get(i)+ " prevres size: "+prevResult.size());
-				prevResult = intersection(prevResult, index.get(query.terms.get(i)), phrase);
+				prevResult = intersection(prevResult, index.get(query.terms.get(i)), phrase, -1);
 			}
 			result = prevResult;
 		}
@@ -95,12 +135,7 @@ public class HashedIndex implements Index {
 		return result;
 	}
 	
-	private PostingsList searchRanked(Query query) {
-		HashMap<Integer, Double> scores = getCosineScores(query);
-		PostingsList results = getResultsFromScore(scores);
-		Collections.sort(results.toList());
-		return results;
-	}
+
 /*
  * tf_idf_dt=ftdt*idft/len d
  * idft = ln(N/dft)
@@ -143,11 +178,17 @@ public class HashedIndex implements Index {
 		return results;
 	}
 	
+	private PostingsList searchRanked(Query query) {
+		HashMap<Integer, Double> scores = getCosineScores(query);
+		PostingsList results = getResultsFromScore(scores);
+		Collections.sort(results.toList());
+		return results;
+	}
 	/**
 	 * Intersection for getting the combined result of files containing a term. Creates a new list for the results.
 	 * If you search for a phrase, it finds the documents with that phrase and sets the offset to the second searched term. 
 	 */
-	public PostingsList intersection(PostingsList a, PostingsList b, boolean phrase){
+	public PostingsList intersection(PostingsList a, PostingsList b, boolean phrase, int offsetLength){
 		PostingsList result = new PostingsList();
 		int i = 0;
 		int j = 0;
@@ -157,7 +198,7 @@ public class HashedIndex implements Index {
 					LinkedList<Integer> first = a.get(i).offsets;
 					LinkedList<Integer> second = b.get(j).offsets;
 					int offset = gotPhrase(first,second);
-					if(offset != -1){
+					if(offset != offsetLength){
 						result.insert(b.get(j).docID, offset, 1);
 					}
 				}

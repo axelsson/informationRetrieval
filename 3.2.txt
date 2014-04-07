@@ -1,0 +1,18 @@
+Evaluation:
+* Behövs ett set av dokument
+
+* Ett antal frågeställningar (t ex 10) där det är hyfsat enkelt att avgöra om svaret är relevant (kanske inte något jätteabstrakt)
+
+* En sökmotor med relevance feedback och ranked retrieval implementerat
+
+* Minst två personer som kan genomföra experimentet som har liknande kunskaper inom sökmotorer och samma kunskap(eventuellt ingen) om datasetet.
+
+Sökningen kommer att genomföras på två sätt, med relevance feedback och med query reformulation (att du omformar queryn manuellt efter en sökning). Bestäm en tidsgräns inom vilken användaren ska försöka få fram så bra resultat som möjligt. 
+
+För varje frågeställning, gör följande: 
+
+	Starta tidsmätningen. Låt ena användaren göra en initial sökning med relevance feedback och sedan ge relevance feedback för att omforma resultaten tills användaren är nöjd/tiden har gått ut. Mät sedan precision och recall (antag ett antal relevanta dokument för datasetet)för top 20. Mät också resultaten för top 10. Gör en precision-recall kurva och marker ut precision at 10. 
+
+	Låt sedan en annan användare söka på samma frågeställning men istället genom att använda query reformulation. Använd samma tidsgräns och mät också resultaten för top 20 i slutet på samma sätt som ovan. 
+
+Sammanställ mätdatan från alla queries till en medelvärdesgraf för precision/recall, en för varje metod. Nu kan man ställa värdena mot varandra. 

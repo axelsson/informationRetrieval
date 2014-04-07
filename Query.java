@@ -70,13 +70,14 @@ public class Query {
 			else
 				nonRelevantDocs.add(results.get(i));
 		}
+    	
     	numRelevantDocs = 1.0/numRelevantDocs;
     	//numRelevantDocs = Math.sqrt(numRelevantDocs);
     	normalizeEntries(results);
     	normalizeWeights();
     	
     	double alpha = 1.0;
-    	double beta = 0.25;
+    	double beta = 0.75;
     	//multiply query terms with alpha
     	for (int i = 0; i < weights.size(); i++) {
     		double w = weights.get(i)*alpha;

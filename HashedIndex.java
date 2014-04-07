@@ -24,7 +24,8 @@ import java.util.Map.Entry;
  *   Implements an inverted index as a Hashtable from words to PostingsLists.
  */
 public class HashedIndex implements Index {
-
+	double LOW_IDF = 0.3;
+	boolean SPEEDUP = true;
 	/** The index as a hashtable. */
 	private HashMap<String,PostingsList> index = new HashMap<String,PostingsList>();
 
@@ -67,27 +68,22 @@ public class HashedIndex implements Index {
 	 */
 	public PostingsList search( Query query, int queryType, int rankingType, int structureType ) {
 		PostingsList result = new PostingsList();
-		double lowIdf = 0.3;
 		double[] idfForTerms = computeIdfForTerms(query);
-		boolean speedUp = true;
-		/*
-		 * spara bara high-idf:
-		 * 
-		 * 
-		 * intersection och ranked, bara ta bort ord
-		 * phrase queries, word * * nextWord
-		 */
 		double startTime = System.nanoTime();
 		if(queryType == Index.PHRASE_QUERY)
-			result = doIntersection(query, true);
+			if(SPEEDUP)
+				result = intersectionWithSpeedup(query, true, idfForTerms);
+			else
+				result = doIntersection(query, true);
 		else if(queryType == Index.RANKED_QUERY){
-			if(speedUp)
+			if(SPEEDUP)
 				removeTerms(query, idfForTerms);
 			result = searchRanked(query);
 		}else if(queryType == Index.INTERSECTION_QUERY){
-			if(speedUp)
-				removeTerms(query, idfForTerms);
-			result = doIntersection(query, false);
+			if(SPEEDUP)
+				result = intersectionWithSpeedup(query, false, idfForTerms);
+			else
+				result = doIntersection(query, false);
 		}
 		double endTime = System.nanoTime();
 		System.out.println(query.terms.toString() + " "+(endTime-startTime)+" ns.");
@@ -95,10 +91,12 @@ public class HashedIndex implements Index {
 	}
 
 	private void removeTerms(Query query, double[] idfForTerms) {
+		int removed = 0;
 		for (int i = 0; i < idfForTerms.length; i++) {
-			if(idfForTerms[i] < 1.0){
-				query.terms.remove(i);
-				query.weights.remove(i);
+			if(idfForTerms[i] < LOW_IDF){
+				query.terms.remove(i-removed);
+				query.weights.remove(i-removed);
+				removed++;
 			}
 		}
 	}
@@ -112,29 +110,11 @@ public class HashedIndex implements Index {
 			PostingsList list = index.get(term);
 			int df_t = list.size();
 			idf[i] = Math.log(N/df_t);
-			System.out.println("idf for: "+term+" "+idf[i]);
+			//System.out.println("idf for: "+term+" "+idf[i]);
 			i++;
 		}
 		return idf;
 	}
-
-
-	private PostingsList doIntersection(Query query, boolean phrase) {
-		PostingsList result;
-		if(query.size() > 1){
-			PostingsList prevResult = index.get(query.terms.get(0));
-			for (int i = 1; i < query.size(); i++) {
-				System.err.println("intersection with term: "+query.terms.get(i)+ " prevres size: "+prevResult.size());
-				prevResult = intersection(prevResult, index.get(query.terms.get(i)), phrase, -1);
-			}
-			result = prevResult;
-		}
-		else{
-			result = index.get(query.terms.get(0));
-		}
-		return result;
-	}
-	
 
 /*
  * tf_idf_dt=ftdt*idft/len d
@@ -147,6 +127,8 @@ public class HashedIndex implements Index {
 		int i = 0;
 		for (String term : q.terms) {
 			PostingsList list = index.get(term);
+			if(list == null)
+				continue;
 			int df_t = list.size();
 			double idf_t = Math.log(N/df_t);
 			double w_tq = idf_t;
@@ -183,6 +165,53 @@ public class HashedIndex implements Index {
 		PostingsList results = getResultsFromScore(scores);
 		Collections.sort(results.toList());
 		return results;
+	}
+	private PostingsList doIntersection(Query query, boolean phrase) {
+		//System.err.println("doIntersection");
+		PostingsList result;
+		if(query.size() > 1){
+			PostingsList prevResult = index.get(query.terms.get(0));
+			for (int i = 1; i < query.size(); i++) {
+				//System.err.println("intersection with term: "+query.terms.get(i)+ " prevres size: "+prevResult.size());
+				prevResult = intersection(prevResult, index.get(query.terms.get(i)), phrase, -1);
+			}
+			result = prevResult;
+		}
+		else{
+			result = index.get(query.terms.get(0));
+		}
+		return result;
+	}
+	
+	private PostingsList intersectionWithSpeedup(Query query, boolean phrase, double[] idfForTerms) {
+		//System.err.println("intersectionWithSpeedup, phrase:"+phrase);
+		PostingsList result;
+		int diffDistance = -1;
+		int startingPos = 0;
+		for (int i = 0; i < query.terms.size(); i++) {
+			if(idfForTerms[i] > LOW_IDF){
+				startingPos = i;
+				break;
+			}
+		}
+		if(query.size() > startingPos+1){
+			PostingsList prevResult = index.get(query.terms.get(startingPos));
+			for (int i = 1; i < query.size(); i++) {
+				if(idfForTerms[i] > LOW_IDF){
+					//System.err.println("intersection with term: "+query.terms.get(i)+ " prevres size: "+prevResult.size());
+					prevResult = intersection(prevResult, index.get(query.terms.get(i)), phrase, diffDistance);
+					diffDistance = -1;
+				}else {
+					diffDistance--;
+				}
+				
+			}
+			result = prevResult;
+		}
+		else{
+			result = index.get(query.terms.get(startingPos));
+		}
+		return result;
 	}
 	/**
 	 * Intersection for getting the combined result of files containing a term. Creates a new list for the results.

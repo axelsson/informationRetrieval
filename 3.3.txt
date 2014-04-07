@@ -8,13 +8,29 @@ enhetlig europeisk valuta (421	hits)
 sex i reklam (6694	hits) 
 lutande tornet i pisa (6135	hits)	
 genteknik	(6	hits)	
-Time for search: 1.0 ms.
-Time for search: 55.0 ms.
-Time for search: 0.0 ms.
-Time for search: 15.0 ms.
-Time for search: 0.0 ms.
-Time for search: 15.0 ms.
-Time for search: 2.0 ms.
-Time for search: 23.0 ms.
-Time for search: 12.0 ms.
-Time for search: 0.0 ms.
+
+Ranked retrieval, without speedup:
+[antikens, underverk] 330577.0 ns
+[olympiska, spel, och, fred] 4226080.0 ns
+[europacupen] 41055.0 ns
+[konflikten, i, palestina] 3604270.0 ns
+[snowboard] 29936.0 ns
+[den, europeiska, bilindustrin] 3322875.0 ns
+[enhetlig, europeisk, valuta] 454597.0 ns
+[sex, i, reklam] 4007976.0 ns
+[lutande, tornet, i, pisa] 3640622.0 ns
+[genteknik] 25659.0 ns
+
+Ranked retrieval, with speedup:
+[antikens, underverk] 441767.0 ns
+[olympiska, spel, fred] 807839.0 ns
+[europacupen] 40627.0 ns
+[konflikten, palestina] 296364.0 ns
+[snowboard] 33357.0 ns
+[europeiska, bilindustrin] 579044.0 ns
+[enhetlig, europeisk, valuta] 496934.0 ns
+[sex, reklam] 818958.0 ns
+[lutande, tornet, pisa] 168923.0 ns
+[genteknik] 29508.0 ns
+
+Alltså gick det c a 5-10 gånger snabbare när det fanns ord med låga idf-värden.
